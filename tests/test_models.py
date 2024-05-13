@@ -140,7 +140,17 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(len(Product.all()), 1)
         product.delete()
         self.assertEqual(len(Product.all()), 0)
-        
+    
+    def test_list_all_products(self):
+        "It should list all products"
+        products = Product.all()
+        self.assertEqual(len(products), 0)
+        for i in range(5):
+            product = ProductFactory()
+            product.create()
+        products = Product.all()
+        self.assertEqual(len(products), 5)
+
 
         
 
