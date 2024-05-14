@@ -129,7 +129,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product_id, original_id)
         self.assertEqual(product.description, "new description")
         products = Product.all()
-        self.assertEqual(len(products), 1)
+        self.assertEqual(products.count(), 1)
         self.assertEqual(products[0].id, original_id)
         self.assertEqual(products[0].description, "new description")
 
@@ -162,6 +162,17 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(found_products.count(), count)
         self.assertTrue(all(product.name == name for product in found_products))
 
+    def test_find_by_availability(self):
+        """It should find products by availabilty"""
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.create()
+        first_availability = products[0].available
+        count = len([product for product in products if product.available == True])
+        available = Product.find_by_availability(True)
+        self.assertEqual(available.count(), count)
+        for product in available:
+            self.assertEqual(product.available, True)
 
 
         
