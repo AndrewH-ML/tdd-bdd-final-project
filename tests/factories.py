@@ -38,7 +38,7 @@ class ProductFactory(factory.Factory):
             "Pants",
             "Shirt",
             "Apple",
-            "Banana"
+            "Banana",
             "Pots",
             "Towels",
             "Ford",
@@ -47,8 +47,17 @@ class ProductFactory(factory.Factory):
             "Wrench"
         ]
     )
-    description = factory.Faker('paragraph')  # Generates a random paragraph
+    description = factory.Faker("text")  # Generates a random paragraph
     price = FuzzyDecimal(0.5, 2000.0, 2)  # Generates a random decimal price between 0.99 and 199.99
-    available = FuzzyChoice([True, False])  # Randomly chooses between True and False
-    category = FuzzyChoice([category.name for category in Category])  # Randomly chooses a category from the Category enum
+    available = FuzzyChoice(choices=[True, False])  # Randomly chooses between True and False
+    category = FuzzyChoice(
+        choices=[
+            Category.UNKNOWN,
+            Category.CLOTHS,
+            Category.FOOD,
+            Category.HOUSEWARES,
+            Category.AUTOMOTIVE,
+            Category.TOOLS,
+        ]
+    )
 

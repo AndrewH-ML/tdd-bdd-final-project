@@ -111,10 +111,10 @@ class TestProductModel(unittest.TestCase):
         product.create()
         # Assert product now has product ID
         self.assertIsNotNone(product.id)
-        new_product = Product.find(product_id)
+        new_product = Product.find(product.id)
         self.assertEqual(new_product.id, product.id)
         self.assertEqual(new_product.name, product.name)
-        self.assertEqual(new_product.description. product.description)
+        self.assertEqual(new_product.description, product.description)
         self.assertEqual(new_product.price, product.price)
 
     def test_update_a_product(self):
@@ -126,10 +126,10 @@ class TestProductModel(unittest.TestCase):
         original_id = product.id
         product.description = "new description"
         product.update()
-        self.assertEqual(product_id, original_id)
+        self.assertEqual(product.id, original_id)
         self.assertEqual(product.description, "new description")
         products = Product.all()
-        self.assertEqual(products.count(), 1)
+        self.assertEqual(len(products), 1)
         self.assertEqual(products[0].id, original_id)
         self.assertEqual(products[0].description, "new description")
 
@@ -173,6 +173,18 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(available.count(), count)
         for product in available:
             self.assertEqual(product.available, True)
+
+    def test_find_by_category(self):
+        """It should find a product by category"""
+        products = ProductFactory.create_batch(10)
+        for product in products:
+            product.create()
+        first_category = products[0].category
+        count = len([product for product in products if product.category == first_category])
+        found = Product.find_by_category(first_category)
+        self.assertEqual(found.count(), count)
+        for product in found:
+            self.assertEqual(product.category, first_category)
 
 
         
