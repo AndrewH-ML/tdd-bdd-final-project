@@ -72,7 +72,7 @@ def check_content_type(content_type):
 def create_products():
     """
     Creates a Product
-    This endpoint will create a Product based the data in the body that is posted
+    This endpoint will create a Product based on the data in the body that is posted
     """
     app.logger.info("Request to Create a Product...")
     check_content_type("application/json")
@@ -114,7 +114,7 @@ def get_products(product_id):
     """
     Retreive a single Product
 
-    This endpong will return a product based on it's id
+    This endpoint will return a product based on it's id
     """
     app.logger.info("Request to Retrieve a product with id [%s]", product_id)
     product = Product.find(product_id)
