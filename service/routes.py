@@ -21,6 +21,7 @@ Product Store Service with UI
 from flask import jsonify, request, abort
 from flask import url_for  # noqa: F401 pylint: disable=unused-import
 from service.models import Product
+from service.models import Category
 from service.common import status  # HTTP Status Codes
 from . import app
 
@@ -106,10 +107,15 @@ def list_products():
     """Returns a list of products"""
     app.logger.info("Request to list Products...")
     products = []
-    name = request.args.get()
+    name = request.args.get("name")
+    category = request.args.get("category")
     if name:
         app.logger.info("Find by name: %s", name)
         products = Product.find_by_name(name)
+    elif category:
+        app.logger.info("Find by category: %s", category)
+        category_value = getattr(Category, category.upper())
+        products = Product.find_by_category(category_value)
     else:
         app.logger.info("Find all")
         products = Product.all()
