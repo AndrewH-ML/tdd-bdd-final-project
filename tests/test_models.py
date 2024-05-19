@@ -104,6 +104,9 @@ class TestProductModel(unittest.TestCase):
     #
     # ADD YOUR TEST CASES HERE
     #
+
+
+    
     def test_read_a_product(self):
         """It should read a product""" 
         product = ProductFactory()
@@ -116,6 +119,7 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(new_product.name, product.name)
         self.assertEqual(new_product.description, product.description)
         self.assertEqual(new_product.price, product.price)
+        
 
     def test_update_a_product(self):
         """It should update a product"""
@@ -186,8 +190,27 @@ class TestProductModel(unittest.TestCase):
         for product in found:
             self.assertEqual(product.category, first_category)
 
-
+    def test_find_by_price(self):
+        """It should find a product by price"""
+        products = ProductFactory.create_batch(5)
+        for product in products:
+            product.create()
+        price = products[0].price
+        count = len([product for product in products if product.price == price])
+        found_products = Product.find_by_price(price)
         
+        self.assertEqual(found_products.count(), count)
+        self.assertTrue(all(product.price == price for product in found_products))
+
+    def test_find_by_non_existent_price(self):
+        """It should not find any product with a non-existent price"""
+        products = ProductFactory.create_batch(5)
+        for product in products:
+            product.create()
+        existing_prices = {product.price for product in products}
+        non_existent_price = max(existing_prices) + Decimal("1.00")
+        found_products = Product.find_by_price(non_existent_price)
+        self.assertEqual(found_products.count(), 0)
 
 
 
